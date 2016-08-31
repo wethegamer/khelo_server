@@ -54,10 +54,7 @@ class DBHandler {
             if ($stmt->execute()) {
                 $response['error'] = false;
                 $response['message'] = "User registration successful.";
-                $response['user_id'] = $this->conn->insert_id;
-                $response['name'] = $name;
-                $response['phone'] = $phone;
-                $response['email'] = $email;
+                $response['user'] = $this->getUserById($this->conn->insert_id);
             }
             $stmt->close();
         }
@@ -126,7 +123,7 @@ class DBHandler {
         $stmt->bind_param('i', $uid);
         $stmt->execute();
         $userData = array();
-        $stmt->bind_result($userData['id'], $userData['name'], $userData['email'], $userData['phone']);
+        $stmt->bind_result($userData['id'], $userData['name'], $userData['email'], $userData['phone'], $userData['fcm_id']);
         $stmt->fetch();
         $stmt->close();
         return $userData;
