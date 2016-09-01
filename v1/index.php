@@ -86,6 +86,33 @@ $app->post('/group/:g_id/add-member/:m_id', function($gID,$mUID) {
     echoResponse($res, 200);
 });
 
+//new message in group
+$app->post('/user/:group_id/message',  function($gID) use ($app) {
+    verifyParams(array('sender_uid','message'));
+    $senderUID=$app->request()->post('sender_uid');
+    $message=$app->request()->post('message');
+    
+    $db=new DBHandler();
+    
+    $resp=$db->newMessage($senderUID, $gID, $message);
+    
+    if (!$resp['error']) {
+        
+    }
+    
+});
+
+//PUT request
+//update fcm id
+$app->put('/token/:uid',  function($uID) use ($app) {
+    verifyParams(array('fcm_id'));
+    $fcmID=$app->request()->put('fcm_id');
+    
+    $db=new DBHandler();
+    $result=$db->updateFcmId($uID, $fcmID);
+    echoResponse($result, 200);
+    
+});
 
 //verificaion and response
 function verifyParams($fields) {
