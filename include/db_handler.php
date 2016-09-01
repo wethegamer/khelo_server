@@ -62,7 +62,6 @@ class DBHandler {
     }
 
     public function newGroup($groupName, $creatorUID) {
-        $gData = array();
         $response['error'] = true;
         $response['message'] = "An error occurred";
 
@@ -71,20 +70,21 @@ class DBHandler {
         $stmt->bind_param("si", $groupName, $creatorUID);
         $temp = $this->conn->insert_id;
         if ($stmt->execute()) {
-            $stmt->close();
-            $stmt1 = $this->conn->prepare(
-                    "SELECT * FROM group_list WHERE group_id=?"
-            );
-            $stmt1->bind_param("i", $temp);
-            $stmt1->execute();
-            $stmt1->bind_result($gData['group_id'], $gData['group_name'], $gData['creation_date'], $gData['creator_uid']);
-            $stmt1->fetch();
-            $stmt1->close();
-            $response['group_data'] = $gData;
+//            $stmt1 = $this->conn->prepare(
+//                    "SELECT * FROM group_list WHERE group_id=?"
+//            );
+//            $stmt1->bind_param("i", $temp);
+//            $stmt1->execute();
+//            $stmt1->bind_result($gData['group_id'], $gData['group_name'], $gData['creation_date'], $gData['creator_uid']);
+//            $stmt1->fetch();
+//            $stmt1->close();
+            $response['group_data'] = $this->getGroupById($temp);
 
             //ADD GROUP TO TABLE MAINTAING LIST OF MEMBERS
             $this->addMemberToGroup($creatorUID, $temp);
         }
+        $stmt->close();
+
         return $response;
     }
 
@@ -102,7 +102,7 @@ class DBHandler {
         return $response;
     }
 
-    public function getGroupById($gID) {
+    protected function getGroupById($gID) {
         $stmt = $this->conn->prepare(
                 "SELECT * FROM group_list WHERE group_id=?"
         );
@@ -116,7 +116,7 @@ class DBHandler {
         return $groupData;
     }
 
-    public function getUserById($uid) {
+    protected function getUserById($uid) {
         $stmt = $this->conn->prepare(
                 "SELECT * FROM users WHERE user_id=?"
         );
@@ -230,7 +230,7 @@ class DBHandler {
             $stmt2->execute();
             $temp = NULL;
             $stmt2->bind_result(
-                    $data['message_id'], $data['group_id'], $temp, $data['message']);
+                    $data['message_id'], $data['group_id'], $temp, $data['message'],$data['time_stamp']);
             $stmt2->fetch();
             $data['sender'] = $this->getUserById($temp);
             $response['data'] = $data;
