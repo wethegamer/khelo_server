@@ -1,0 +1,37 @@
+URL LIST:
+
+NEW_MESSAGE:
+	http://localhost/khelo/v1/group/_GID_/messages
+
+GROUP_MEMBERS:
+	http://localhost/khelo/v1/group/_GID_/members
+
+GROUPS_OF_MEMBER:
+	http://localhost/khelo/v1/user/_MUID_/groups
+	
+GROUPS_MADE_BY_ADMIN:
+	http://localhost/khelo/v1/admin/_AID_/groups
+	
+NEW_USER:
+	http://localhost/khelo/v1/user/register
+	
+NEW_GROUP:
+	http://localhost/khelo/v1/group/create/_UID_
+	
+NEW_MESSAGE:
+	http://localhost/khelo/v1/group/_GID_/message
+	
+NEW_MEMBER_TO_GROUP:
+	http://localhost/khelo/v1/group/_GID_/add-member/_MID_
+	
+FCM_TOKEN_UPDATE:
+	http://localhost/khelo/v1/user-token-update/_UID_
+	
+
+---NOT TO BE LISTED IN APP URLS---
+
+GET_ALL_USERS:
+	http://localhost/khelo/v1/users
+	
+GET_ALL_GROUPS:
+	http://localhost/khelo/v1/groups
