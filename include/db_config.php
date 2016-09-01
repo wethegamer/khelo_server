@@ -11,4 +11,4 @@ define('DB_PASSWORD', '');
 define('DB_HOST','localhost');
 define('DB_USER', 'root');
 
-define('GOOGLE_API_KEY','AIzaSyBobvk9Fv5gsw0gDn7lxJd3P46ViYvRYJ4');
+define('GOOGLE_API_KEY','AIzaSyBoKBjmxCPiCgg_A15V8Vt4HyAaIc61j-c');
