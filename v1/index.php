@@ -128,6 +128,20 @@ $app->put('/token/:uid',  function($uID) use ($app) {
     
 });
 
+//ADMIN PAGE REQUESTS
+//get
+//getallusers
+$app->get('/users',  function() {
+    $db=new DBHandler();
+    echoResponse($db->getAllUsers(), 200);
+});
+
+//get all group list
+$app->get('/groups', function() {
+    $db=new DBHandler();
+    echoResponse($db->getAllGroups(), 200);
+});
+
 //verificaion and response
 function verifyParams($fields) {
     $error=false;
