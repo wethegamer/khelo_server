@@ -62,14 +62,17 @@ class DBHandler {
     }
 
     public function newGroup($groupName, $creatorUID) {
+        mysqli_report(MYSQLI_REPORT_ERROR);
         $response['error'] = true;
         $response['message'] = "An error occurred";
 
         //REGISTRING GROUP IN ALL GROUP LIST
         $stmt = $this->conn->prepare("INSERT INTO group_list(group_name,creator_uid) VALUES(?,?)");
         $stmt->bind_param("si", $groupName, $creatorUID);
-        $temp = $this->conn->insert_id;
+        
         if ($stmt->execute()) {
+            $temp = $this->conn->insert_id;
+        //echo 'id'.$temp;
             $response['group_data'] = $this->getGroupById($temp);
 
             //ADD GROUP TO TABLE MAINTAING LIST OF MEMBERS
@@ -181,7 +184,11 @@ class DBHandler {
     }
 
     public function getAllGroupsByAdminUID($uid) {
-        $stmt = $this->conn->prepare("SELECT * FROM group_list WHERE creator_uid=?");
+        $query = "SELECT b.group_name,b.creation_date,b.creator_uid," .
+                "c.name,c.phone,c.email FROM group_list b," .
+                "users c WHERE b.creator_uid=? " .
+                "AND b.creator_uid=c.user_id";
+        $stmt = $this->conn->prepare($query);
         $stmt->bind_param('i', $uid);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -207,6 +214,7 @@ class DBHandler {
     }
 
     public function newMessage($senderUID, $groupUID, $message) {
+        mysqli_report(MYSQLI_REPORT_ERROR);
         $response['error'] = true;
         $response['data'] = 'error';
         $stmt = $this->conn->prepare("INSERT INTO group_messages(group_id,sender_uid,message)" .
@@ -225,9 +233,10 @@ class DBHandler {
             $stmt2->bind_result(
                     $data['message_id'], $data['group_id'], $temp, $data['message'], $data['time_stamp']);
             $stmt2->fetch();
+            $stmt2->close();
             $data['sender'] = $this->getUserById($temp);
             $response['data'] = $data;
-            $stmt2->close();
+            
         }
         return $response;
     }
