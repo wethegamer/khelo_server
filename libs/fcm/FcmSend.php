@@ -28,7 +28,7 @@ class FcmSend {
     }
 
     private function sendPushToGroup($fields) {
-        include_once __DIR__ . '\..\..\include\db_config.php';
+        require_once __DIR__ . '\..\..\include\db_config.php';
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 

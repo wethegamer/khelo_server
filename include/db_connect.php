@@ -10,7 +10,7 @@ class DBConnect {
     private $con;
     
     public function connect() {
-        include_once __DIR__.'\db_config.php';
+        require_once __DIR__.'\db_config.php';
         $this->con=  mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         
         if (mysqli_connect_errno()) {

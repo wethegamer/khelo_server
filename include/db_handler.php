@@ -11,7 +11,7 @@
  *
  * @author Lenovo
  */
-include_once __DIR__ . '\db_connect.php';
+require_once __DIR__ . '\db_connect.php';
 
 class DBHandler {
 
@@ -70,14 +70,6 @@ class DBHandler {
         $stmt->bind_param("si", $groupName, $creatorUID);
         $temp = $this->conn->insert_id;
         if ($stmt->execute()) {
-//            $stmt1 = $this->conn->prepare(
-//                    "SELECT * FROM group_list WHERE group_id=?"
-//            );
-//            $stmt1->bind_param("i", $temp);
-//            $stmt1->execute();
-//            $stmt1->bind_result($gData['group_id'], $gData['group_name'], $gData['creation_date'], $gData['creator_uid']);
-//            $stmt1->fetch();
-//            $stmt1->close();
             $response['group_data'] = $this->getGroupById($temp);
 
             //ADD GROUP TO TABLE MAINTAING LIST OF MEMBERS
@@ -229,8 +221,9 @@ class DBHandler {
             $stmt2->bind_param('i', $msgID);
             $stmt2->execute();
             $temp = NULL;
+
             $stmt2->bind_result(
-                    $data['message_id'], $data['group_id'], $temp, $data['message'],$data['time_stamp']);
+                    $data['message_id'], $data['group_id'], $temp, $data['message'], $data['time_stamp']);
             $stmt2->fetch();
             $data['sender'] = $this->getUserById($temp);
             $response['data'] = $data;
