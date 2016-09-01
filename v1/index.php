@@ -97,9 +97,23 @@ $app->post('/user/:group_id/message',  function($gID) use ($app) {
     $resp=$db->newMessage($senderUID, $gID, $message);
     
     if (!$resp['error']) {
+        require_once __DIR__.'\..\libs\fcm\FcmSend.php';
+        require_once __DIR__.'\..\libs\fcm\Push.php';
         
+        $fcmSend=new FcmSend();
+        $push=new Push();
+        
+        $data['group']=$db->getGroupById($gID);
+        $data['message']=$resp['data'];
+        $push->setTitle($data['group']['group_name']);
+        $notif['title']=$data['group']['group_name'];
+        $notif['body']=$message;
+        $push->setNotif($notif);
+        $push->setData($data);
+        $fcmSend->sendToMultiple(fcmIdList($gID), $push->getPush());
+        
+        echoResponse($data, 200);
     }
-    
 });
 
 //PUT request
@@ -157,6 +171,17 @@ function echoResponse($resp,$statCode) {
     $app->status($statCode);
     $app->contentType('application/json');
     echo json_encode($resp);
+}
+
+function fcmIdList($gID) {
+    $db=new DBHandler();
+    $idList=array();
+    $regId=$db->getGroupMembers($gID);
+    
+    foreach ($regId as $value) {
+        array_push($idList, $value['fcm_id']);
+    }
+    return $idList;
 }
 
 $app->run();
