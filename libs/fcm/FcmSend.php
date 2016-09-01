@@ -47,7 +47,7 @@ class FcmSend {
         $result=  curl_exec($cURLconn);
         
         if (!$result) {
-            die('cURL failed:'.curl_error($cURLconn));
+            die('cURL failed: '.curl_error($cURLconn));
         }
         
         curl_close($cURLconn);
