@@ -94,7 +94,7 @@ class DBHandler {
         return $response;
     }
 
-    protected function getGroupById($gID) {
+    public function getGroupById($gID) {
         $stmt = $this->conn->prepare(
                 "SELECT * FROM group_list WHERE group_id=?"
         );
@@ -146,7 +146,7 @@ class DBHandler {
     }
 
     public function getGroupMembers($gID) {
-        $query = "SELECT a.member_uid,b.name,b.email,b.phone" .
+        $query = "SELECT a.member_uid,b.name,b.email,b.phone,b.fcm_id" .
                 " FROM group_members a,users b" .
                 " WHERE a.group_id=? AND a.member_uid=b.user_id";
 
