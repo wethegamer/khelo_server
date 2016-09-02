@@ -86,7 +86,7 @@ $app->post('/group/:g_id/add-member/:m_id', function($gID, $mUID) {
 //new message in group
 $app->post('/group/:group_id/message', function($gID) use ($app) {
     verifyParams(array('sender_uid', 'message'));
-    $senderUID = $app->request()->post('sender_uid');
+    $senderUID = (int)$app->request()->post('sender_uid');
     $message = $app->request()->post('message');
 
     $db = new DBHandler();

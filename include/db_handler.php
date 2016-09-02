@@ -69,10 +69,12 @@ class DBHandler {
         //REGISTRING GROUP IN ALL GROUP LIST
         $stmt = $this->conn->prepare("INSERT INTO group_list(group_name,creator_uid) VALUES(?,?)");
         $stmt->bind_param("si", $groupName, $creatorUID);
-        
+
         if ($stmt->execute()) {
             $temp = $this->conn->insert_id;
-        //echo 'id'.$temp;
+            //echo 'id'.$temp;
+            $response['error']=false;
+            $response['message']="done";
             $response['group_data'] = $this->getGroupById($temp);
 
             //ADD GROUP TO TABLE MAINTAING LIST OF MEMBERS
@@ -184,7 +186,7 @@ class DBHandler {
     }
 
     public function getAllGroupsByAdminUID($uid) {
-        $query = "SELECT b.group_name,b.creation_date,b.creator_uid," .
+        $query = "SELECT b.group_id,b.group_name,b.creation_date,b.creator_uid," .
                 "c.name,c.phone,c.email FROM group_list b," .
                 "users c WHERE b.creator_uid=? " .
                 "AND b.creator_uid=c.user_id";
@@ -236,7 +238,6 @@ class DBHandler {
             $stmt2->close();
             $data['sender'] = $this->getUserById($temp);
             $response['data'] = $data;
-            
         }
         return $response;
     }
